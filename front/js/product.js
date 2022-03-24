@@ -50,24 +50,24 @@ async function displayProduct() {
                 quantity: qte,
                 color: color,
                 idProduct: product._id,
-                productImgUrl: product.imageUrl,
-                kName: product.name,
-                altTxt: product.altTxt,
-                prix: product.price
             };
-            alert("produit ajouté au panier avec succèes")
+            alert("produit ajouté au panier avec succès")
             console.log(finalProduct);
             // Local Storage
-            let productInLocalStorage = JSON.parse(localStorage.getItem("product")); // JSON.parse convert data to JSON format from localstorage.
+            let productInLocalStorage = JSON.parse(localStorage.getItem("product")); // JSON.parse convert data JSON to javascript object  from localstorage.
             console.log(productInLocalStorage);
+            const search = productInLocalStorage.find((el) =>  el.color === color && el.idProduct === id )
             // If there is already product in localstorage
-            if (productInLocalStorage) {
+            if (search){
+                let newQuantity = parseInt(qte) + search.quantity;
+                search.quantity = newQuantity;
+                localStorage.setItem("product", JSON.stringify(productInLocalStorage));
+            } else if (productInLocalStorage) {
                 productInLocalStorage.push(finalProduct);
                 localStorage.setItem("product", JSON.stringify(productInLocalStorage));
                 console.log(productInLocalStorage);
-            }
             // If there is no product in localstorage
-            else {
+            } else {
                 productInLocalStorage = [];
                 productInLocalStorage.push(finalProduct);
                 localStorage.setItem("product", JSON.stringify(productInLocalStorage));
