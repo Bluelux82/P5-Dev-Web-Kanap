@@ -102,7 +102,7 @@ if (productInLocalStorage === null || productInLocalStorage == 0) {
             productPrice.innerText = apiElement.price + " €"; // Insert specified value of the object from API into HTML
             // ---------------------------------- Total products price ----------------------------------
             let totalPrice = document.getElementById("totalPrice");
-            if(totalPrice.innerText == ""){
+            if (totalPrice.innerText == "") {
                 totalPrice.innerText = apiElement.price * parseInt(productInLocalStorage[product].quantity);
             }
             else {
@@ -261,42 +261,45 @@ confirmationButtonFormular.addEventListener("click", (event) => {
             return false;
         }
     }
+    // Check if formular value are true
+    if (window.localStorage.length === 0) {
+        alert("Impossible de valider la commande si le panier est vide.")
+    }
+    else if (firstNameCheck(), lastNameCheck(), addressCheck(), cityCheck(), emailCheck()) {
         // Array contains each id of products present into the cart for POST
         let idOfEachProductInCart = [];
-        for (let i = 0; i < productInLocalStorage.length;i++) {
+        for (let i = 0; i < productInLocalStorage.length; i++) {
             idOfEachProductInCart.push(productInLocalStorage[i].idProduct);
         }
 
         // This variable contains "contact and idOfEachProductInCart" content for POST.
         const order = {
             // this oject contains all the informations write in formular for POST
-            contact : {
-                firstName : document.getElementById("firstName").value,
-                lastName : document.getElementById("lastName").value,
-                address : document.getElementById("address").value,
-                city : document.getElementById("city").value,
-                email : document.getElementById("email").value
+            contact: {
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                address: document.getElementById("address").value,
+                city: document.getElementById("city").value,
+                email: document.getElementById("email").value
             },
             products: idOfEachProductInCart,
-        } 
-    // Check if formular value are true
-    if (firstNameCheck(),lastNameCheck(),addressCheck(),cityCheck(),emailCheck()) {
+        }
         // If true update object in localstorage and execute POST
         const send = fetch("http://localhost:3000/api/products/order", {
             method: 'POST',
             body: JSON.stringify(order),
             headers: {
-                "Content-Type": "application/json" 
+                "Content-Type": "application/json"
             }
         })
-    send.then(async(response)=>{
-        const resp = await response.json();
-        if(response.ok){
-            localStorage.setItem("orderId", resp.orderId)
-            console.log(resp.orderId)
-            document.location.href = "confirmation.html";
-        }
-    })
+        send.then(async (response) => {
+            const resp = await response.json();
+            if (response.ok) {
+                localStorage.setItem("orderId", resp.orderId)
+                console.log(resp.orderId)
+                document.location.href = "confirmation.html";
+            }
+        })
     } else {
         // Do nothing
     }
