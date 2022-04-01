@@ -56,10 +56,10 @@ async function displayProduct() {
             // Local Storage
             let productInLocalStorage = JSON.parse(localStorage.getItem("product")); // JSON.parse convert data JSON to javascript object  from localstorage.
             console.log(productInLocalStorage);
-            const search = productInLocalStorage.find((el) =>  el.color === color && el.idProduct === id )
+            const search = productInLocalStorage.find((el) =>  el.color === color && el.idProduct === id)
             // If there is already product in localstorage
             if (search){
-                let newQuantity = parseInt(qte) + search.quantity;
+                let newQuantity = parseInt(qte) + parseInt(search.quantity);
                 search.quantity = newQuantity;
                 localStorage.setItem("product", JSON.stringify(productInLocalStorage));
             } else if (productInLocalStorage) {
