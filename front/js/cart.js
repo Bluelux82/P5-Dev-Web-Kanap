@@ -103,14 +103,16 @@ if (productInLocalStorage === null || productInLocalStorage == 0) {
             // ---------------------------------- Total products price ----------------------------------
             let totalPrice = document.getElementById("totalPrice");
             if (totalPrice.innerText == "") {
-                totalPrice.innerText = apiElement.price * parseInt(productInLocalStorage[product].quantity);
-            }
-            else {
-                totalPrice.innerText = parseInt(totalPrice.innerText) + apiElement.price * parseInt(productInLocalStorage[product].quantity);
+                totalPrice.innerText =
+                    apiElement.price * parseInt(productInLocalStorage[product].quantity);
+            } else {
+                totalPrice.innerText =
+                    parseInt(totalPrice.innerText) +
+                    apiElement.price * parseInt(productInLocalStorage[product].quantity);
             }
             /* ----------------------------------
-                  Total products price - END 
-                  ---------------------------------- */
+                        Total products price - END 
+                        ---------------------------------- */
         }
         displayProduct();
     }
@@ -261,11 +263,32 @@ confirmationButtonFormular.addEventListener("click", (event) => {
             return false;
         }
     }
+    //let test = firstNameCheck() && lastNameCheck() && addressCheck() && cityCheck() && emailCheck();
+
+    let test = true;
+
+    if (!firstNameCheck()) {
+        test = false;
+    }
+    if (!lastNameCheck()) {
+        test = false;
+    }
+    if (!addressCheck()) {
+        test = false;
+    }
+    if (!cityCheck()) {
+        test = false;
+    }
+    if (!emailCheck()) {
+        test = false;
+    }
+
+    //WIN + MAJ + S
+
     // Check if formular value are true
     if (window.localStorage.length === 0) {
-        alert("Impossible de valider la commande si le panier est vide.")
-    }
-    else if (firstNameCheck(), lastNameCheck(), addressCheck(), cityCheck(), emailCheck()) {
+        alert("Impossible de valider la commande si le panier est vide.");
+    } else if (test) {
         // Array contains each id of products present into the cart for POST
         let idOfEachProductInCart = [];
         for (let i = 0; i < productInLocalStorage.length; i++) {
@@ -274,33 +297,33 @@ confirmationButtonFormular.addEventListener("click", (event) => {
 
         // This variable contains "contact and idOfEachProductInCart" content for POST.
         const order = {
-            // this oject contains all the informations write in formular for POST
+            // this object contains all the informations write in formular for POST
             contact: {
                 firstName: document.getElementById("firstName").value,
                 lastName: document.getElementById("lastName").value,
                 address: document.getElementById("address").value,
                 city: document.getElementById("city").value,
-                email: document.getElementById("email").value
+                email: document.getElementById("email").value,
             },
             products: idOfEachProductInCart,
-        }
+        };
         // If true update object in localstorage and execute POST
         const send = fetch("http://localhost:3000/api/products/order", {
-            method: 'POST',
+            method: "POST",
             body: JSON.stringify(order),
             headers: {
-                "Content-Type": "application/json"
-            }
-        })
+                "Content-Type": "application/json",
+            },
+        });
         send.then(async (response) => {
             const resp = await response.json();
             if (response.ok) {
-                localStorage.setItem("orderId", resp.orderId)
-                console.log(resp.orderId)
+                localStorage.setItem("orderId", resp.orderId);
+                console.log(resp.orderId);
                 document.location.href = "confirmation.html";
             }
-        })
+        });
     } else {
         // Do nothing
     }
-})
+});

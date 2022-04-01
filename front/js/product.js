@@ -53,20 +53,23 @@ async function displayProduct() {
             };
             alert("produit ajouté au panier avec succès")
             console.log(finalProduct);
-            // Local Storage
-            let productInLocalStorage = JSON.parse(localStorage.getItem("product")); // JSON.parse convert data JSON to javascript object  from localstorage.
-            console.log(productInLocalStorage);
-            const search = productInLocalStorage.find((el) =>  el.color === color && el.idProduct === id)
             // If there is already product in localstorage
-            if (search){
-                let newQuantity = parseInt(qte) + parseInt(search.quantity);
-                search.quantity = newQuantity;
-                localStorage.setItem("product", JSON.stringify(productInLocalStorage));
-            } else if (productInLocalStorage) {
-                productInLocalStorage.push(finalProduct);
-                localStorage.setItem("product", JSON.stringify(productInLocalStorage));
-                console.log(productInLocalStorage);
-            // If there is no product in localstorage
+            if (localStorage.getItem("product")){
+                let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
+                const search = productInLocalStorage.find((el) =>  el.color === color && el.idProduct === id)
+                /* Check if the item added in cart is the same as the one already present.
+                If true set new value and update object.*/
+                if(search){
+                    let newQuantity = parseInt(qte) + parseInt(search.quantity);
+                    search.quantity = newQuantity;
+                    localStorage.setItem("product", JSON.stringify(productInLocalStorage));
+                // If not the same create another object.
+                } else {
+                    let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
+                    productInLocalStorage.push(finalProduct);
+                    localStorage.setItem("product", JSON.stringify(productInLocalStorage));
+                }
+            // If localstorage is empty
             } else {
                 productInLocalStorage = [];
                 productInLocalStorage.push(finalProduct);
