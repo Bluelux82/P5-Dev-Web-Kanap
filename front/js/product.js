@@ -47,9 +47,9 @@ async function displayProduct() {
             alert("Quantité ou couleur invalide");
         } else {
             let finalProduct = {
-                quantity: qte,
                 color: color,
                 idProduct: product._id,
+                quantity: qte,
             };
             alert("produit ajouté au panier avec succès")
             console.log(finalProduct);
